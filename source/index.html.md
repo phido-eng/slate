@@ -19,115 +19,45 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
-
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam efficitur semper nisl dignissim congue. Pellentesque vel est at velit commodo finibus non et ex. Mauris eu aliquam ligula. Phasellus maximus accumsan rutrum. Fusce dictum lectus vitae ipsum fermentum, nec pharetra lorem pharetra. Donec tempor metus et nulla sodales viverra. Nunc convallis cursus hendrerit. Aenean sodales mollis eros, at consequat arcu varius eget. Duis auctor libero sit amet ex placerat, ac volutpat dolor malesuada. Quisque aliquet a sem a aliquam. Donec pellentesque vitae metus eget varius.
 
 # Authentication
 
-> To authorize, use this code:
+In order to authenticate with the API, you will need an API token. Eventually, we will have a UI allowing you to create/revoke tokens yourself, but until this functionality is complete, we will be handling the access tokens ourselves and passing them off on an individual basis.
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+To authenticate a request, simply add a bearer token header, like so:
+<br />
+<br />
+```Authorization: {Bearer BearerToken}```
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>BearerToken</code> with your personal API key.
 </aside>
 
-# Kittens
+# Pagination
+Our API GET endpoints utilize pagination. You may pass limits (i.e: ?limit=20) and pages (i.e: ?page=2) on these endpoints.
 
-## Get All Kittens
+# Security
+Our API endpoints require use of a bearer token, as described in the above section. Bearer tokens are 1:1 with a retailer in our system. You will only be able to see/modify/create customer, order, and product data that is relevant to your own shop. Tokens must be kept secure, and if compromised, you will need to notify us so that we can revoke the token and re-issue you a new one.
 
-```ruby
-require 'kittn'
+# Orders
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
+## Get orders
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
+This endpoint provides general order searching functionality
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET http://example.com/api/orders`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+query | null | If an email address, will search for orders for a particular email address. If numeric, will attempt to lookup by EA internal order number. If is a string, attempts to look up by customer's last name.
+per_page | 10 | Orders per page [see pagination section above](#pagination).
+since | null | Orders created since this date. Format: m-d-Y. If format is wrong, is ignored.
+status | null | Either `open` (PENDING or SCHEDULED) or `closed` (SHIPPED, CANCELED, or FAILED)
 
 <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
