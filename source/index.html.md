@@ -46,6 +46,27 @@ Our API endpoints require use of a bearer token, as described in the above secti
 
 This endpoint provides general order searching functionality
 
+> The orders JSON structured like this:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Fluffums",
+    "breed": "calico",
+    "fluffiness": 6,
+    "cuteness": 7
+  },
+  {
+    "id": 2,
+    "name": "Max",
+    "breed": "unknown",
+    "fluffiness": 5,
+    "cuteness": 10
+  }
+]
+```
+
 ### HTTP Request
 
 `GET http://example.com/api/orders`
